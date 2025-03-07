@@ -1,0 +1,55 @@
+import time
+import sys
+from functools import lru_cache
+
+# Aumentar limite de recursão para permitir valores grandes de n
+sys.setrecursionlimit(10**6)
+
+@lru_cache(maxsize=None)  # Cache para otimizar chamadas repetidas
+def factorial(n):
+    """
+    Calcula o fatorial de um número usando recursão otimizada com memoização.
+    Caso base: Se n for 0 ou 1, retorna 1.
+    Passo recursivo: Retorna n multiplicado pelo fatorial de (n-1).
+    """
+    if n < 0:
+        raise ValueError("O fatorial não é definido para números negativos.")
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial(n - 1)
+
+def measure_execution_time(n):
+    """
+    Mede o tempo de execução do cálculo do fatorial de n.
+    """
+    start_time = time.time()
+    result = factorial(n)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    return result, execution_time
+
+if __name__ == "__main__":
+    try:
+        n = int(input("Digite um número para calcular o fatorial: "))
+        result, exec_time = measure_execution_time(n)
+        print(f"Fatorial de {n}: {result}")
+        print(f"Tempo de execução: {exec_time:.6f} segundos")
+    except ValueError as e:
+        print(f"Erro: {e}")
+    except RecursionError:
+        print("Erro: Profundidade de recursão excedida. Tente um valor menor ou utilize um método iterativo.")
+
+"""
+Análise de Complexidade:
+
+O algoritmo de fatorial recursivo tem complexidade O(n), pois para calcular factorial(n),
+é necessário calcular factorial(n-1), factorial(n-2) e assim por diante até factorial(1).
+Isso implica que há aproximadamente n chamadas recursivas, cada uma com uma operação O(1).
+Portanto, a complexidade total é O(n).
+
+Para otimização, utilizamos memoização (@lru_cache), que reduz a repetição de cálculos.
+Isso torna a execução mais eficiente para múltiplas chamadas subsequentes.
+
+Entretanto, o uso de recursão ainda pode levar a estouro de pilha para valores muito grandes de n.
+Para esses casos, é recomendado utilizar uma abordagem iterativa para evitar esse problema.
+"""
