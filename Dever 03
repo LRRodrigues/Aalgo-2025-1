@@ -1,0 +1,46 @@
+def eh_palindromo(array, inicio=0, fim=None):
+    """
+    Função recursiva para verificar se um array é um palíndromo.
+    
+    Parâmetros:
+    - array: lista de elementos a ser verificada.
+    - inicio: índice inicial da verificação (começa em 0).
+    - fim: índice final da verificação (inicialmente None, será definido como o último índice do array).
+    
+    Retorna:
+    - True se o array for um palíndromo, False caso contrário.
+    """
+    # Define o índice final na primeira chamada
+    if fim is None:
+        fim = len(array) - 1
+
+    # Caso base: se os índices se cruzam ou são iguais, o array é palíndromo
+    if inicio >= fim:
+        return True
+
+    # Verifica se os elementos nas extremidades são diferentes
+    if array[inicio] != array[fim]:
+        return False
+
+    # Chamada recursiva para os próximos elementos internos
+    return eh_palindromo(array, inicio + 1, fim - 1)
+
+# Listas para teste
+arrays_de_teste = [
+    ([0, 1, 2, 3, 2, 1, 0], "É palíndromo"),
+    (["a", "b", "b", "a"], "É palíndromo"),
+    (["a", "b", "c", "b", "a"], "É palíndromo"),
+    (["a", "b", "c", "f", "b", "a"], "Não é palíndromo"),
+    ([1, 2, 3, 4, 3, 2, 1], "É palíndromo"),
+    ([1, 2, 3, 4, 5, 6, 7], "Não é palíndromo"),
+    ([9, 8, 7, 8, 9], "É palíndromo"),
+    (["python", "java", "c", "java", "python"], "É palíndromo"),
+    (["palavra"], "É palíndromo"),  # Apenas um elemento sempre é palíndromo
+    ([], "É palíndromo"),  # Lista vazia também é considerada palíndromo
+    ([True, False, True], "É palíndromo"),
+    ([True, False, False], "Não é palíndromo"),
+]
+
+for i, (array, esperado) in enumerate(arrays_de_teste, start=1):
+    resultado = "É palíndromo" if eh_palindromo(array) else "Não é palíndromo"
+    print(f"Teste {i}: {array} -> {resultado} (Esperado: {esperado})")
