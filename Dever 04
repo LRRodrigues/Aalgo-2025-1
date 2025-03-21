@@ -1,0 +1,17 @@
+def F(n):
+    # Caso base: quando n é 1, retornamos 2
+    if n == 1:
+        return 2
+    
+    # Passo recursivo: F(n) = 2 * F(n-1) + n^2
+    return 2 * F(n - 1) + n**2
+
+# Solicita um valor de n ao usuário
+n = int(input("Digite um valor para n: "))
+
+# Garante que o usuário insira um valor válido
+if n < 1:
+    print("Por favor, insira um número inteiro positivo.")
+else:
+    # Calcula e exibe o resultado da função recursiva
+    print(f"F({n}) =", F(n))
