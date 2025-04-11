@@ -1,0 +1,97 @@
+class NoABB:
+    def __init__(self, chave):
+        self.chave = chave
+        self.esquerda = None
+        self.direita = None
+
+
+class ArvoreBinariaBusca:
+    def __init__(self):
+        self.__raiz = None
+
+    def inserir(self, chave):
+        self.__raiz = self.__inserir_rec(self.__raiz, chave)
+
+    def buscar(self, chave):
+        return self.__buscar_rec(self.__raiz, chave)
+
+    def remover(self, chave):
+        self.__raiz = self.__remover_rec(self.__raiz, chave)
+
+    def em_ordem(self):
+        print("Em ordem:", end=" ")
+        self.__em_ordem_rec(self.__raiz)
+        print()
+
+    # =================== MÉTODOS PRIVADOS ===================
+
+    def __inserir_rec(self, no, chave):
+        if no is None:
+            return NoABB(chave)
+        if chave < no.chave:
+            no.esquerda = self.__inserir_rec(no.esquerda, chave)
+        elif chave > no.chave:
+            no.direita = self.__inserir_rec(no.direita, chave)
+        # Se a chave já existe, ignora (não insere duplicadas)
+        return no
+
+    def __buscar_rec(self, no, chave):
+        if no is None:
+            return False
+        if chave == no.chave:
+            return True
+        elif chave < no.chave:
+            return self.__buscar_rec(no.esquerda, chave)
+        else:
+            return self.__buscar_rec(no.direita, chave)
+
+    def __remover_rec(self, no, chave):
+        if no is None:
+            return None
+        if chave < no.chave:
+            no.esquerda = self.__remover_rec(no.esquerda, chave)
+        elif chave > no.chave:
+            no.direita = self.__remover_rec(no.direita, chave)
+        else:
+            # Encontrou o nó
+            if no.esquerda is None:
+                return no.direita
+            elif no.direita is None:
+                return no.esquerda
+
+            # Nó com dois filhos: substituir pelo sucessor
+            sucessor = self.__menor_valor(no.direita)
+            no.chave = sucessor.chave
+            no.direita = self.__remover_rec(no.direita, sucessor.chave)
+        return no
+
+    def __menor_valor(self, no):
+        atual = no
+        while atual.esquerda is not None:
+            atual = atual.esquerda
+        return atual
+
+    def __em_ordem_rec(self, no):
+        if no is not None:
+            self.__em_ordem_rec(no.esquerda)
+            print(no.chave, end=' ')
+            self.__em_ordem_rec(no.direita)
+
+
+# ========================
+# EXEMPLO DE USO
+# ========================
+if __name__ == "__main__":
+    abb = ArvoreBinariaBusca()
+
+    elementos = [50, 30, 70, 20, 40, 60, 80]
+    for valor in elementos:
+        abb.inserir(valor)
+
+    abb.em_ordem()
+
+    print("Buscando 40:", "Encontrado!" if abb.buscar(40) else "Não encontrado.")
+    
+    print("Removendo 50...")
+    abb.remover(50)
+    abb.em_ordem()
